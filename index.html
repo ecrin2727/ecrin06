@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I LOVE <ECRİN3 </title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #fff0f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      padding-bottom: 80px;
+    }
+
+    h1 {
+      color: #ff3399;
+      margin-top: 30px;
+      padding: 0 10px;
+    }
+
+    #startBtn, #choice-buttons button {
+      background-color: #ff66b2;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      max-width: 150px;
+      white-space: nowrap;
+    }
+
+    #startBtn:hover, #choice-buttons button:hover {
+      background-color: #ff3385;
+      transform: scale(1.05);
+    }
+
+    #choice-buttons {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 90vw;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+
+    #message {
+      font-size: 1.3rem;
+      margin-top: 20px;
+      color: #cc0066;
+      min-height: 50px;
+      padding: 0 15px;
+    }
+
+    #choice-area {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    #title {
+      font-size: 1.2rem;
+      color: #cc0066;
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .heart {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: fall 3s linear forwards;
+      opacity: 0.8;
+      z-index: 10;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -7.5px; left: 0; }
+    .heart::after { left: -7.5px; top: 0; }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    /* ❤️ Belirgin Buton */
+    #loveBtn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: linear-gradient(to right, #ff66aa, #ff99cc);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff69b4;
+      z-index: 999;
+      transition: 0.3s;
+    }
+
+    #loveBtn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #ff3399, #ff66cc);
+    }
+
+    /* 👇 Sadece ÜSTTEKİ Okçuk */
+    .arrow1 {
+      position: fixed;
+      bottom: 70px;
+      left: 60px;
+      font-size: 2rem;
+      animation: bounce 1.5s infinite;
+      color: #cc0066;
+      opacity: 0.8;
+      z-index: 998;
+      user-select: none;
+    }
+
+    /* .arrow2 kaldırıldı */
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    #reasonList {
+      margin-top: 30px;
+      color: #cc0066;
+      font-size: 1.1rem;
+    }
+
+    .reason-line {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.5s ease;
+      margin: 5px 0;
+    }
+
+    .reason-line.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Müzik player gizli */
+    #musicPlayer {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      #message, .reason-line { font-size: 1rem; }
+      #startBtn, #choice-buttons button, #loveBtn {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+        max-width: 120px;
+      }
+      .arrow1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💖 Sana bir şey söylemek istiyorum... 💖</h1>
+  <button id="startBtn">Ne?</button>
+
+  <div id="choice-area" class="hidden">
+    <div id="title">Birisini Seç Bakalım :)</div>
+    <div id="choice-buttons"></div>
+  </div>
+
+  <p id="message"></p>
+
+  <!-- 👇 Sadece ÜSTTEKİ Ok -->
+  <div class="arrow1">⬇️</div>
+
+  <!-- ❤️ Neden Sana Çok AŞIĞIMM? Buton -->
+  <button id="loveBtn">Neden Sana Çok AŞIĞIMM?</button>
+  <div id="reasonList"></div>
+
+  <!-- 🎵 Müzik player (gizli) -->
+  <div id="musicPlayer">
+    <audio id="audio" src="music.mp3" loop></audio>
+    <span>🎵 Müzik Çalıyor</span>
+    <button id="muteBtn" title="Sesi Kapat/Aç">🔊</button>
+  </div>
+
+  <script>
+    const messages = [
+      "Sana baktığımda tüm dünya duruyor gibi hissediyorum",
+      "Sen yanımdayken hiçbir şeyden korkmuyorum",
+      "Gözlerin her şeyden daha parlak",
+      "Seninle geçirdiğim her saniye bir hazine",
+      "Senin adınla başlıyor günüm",
+      "Sen, kalbimin en güzel yeri",
+      "Sana olan sevgim, yıldızlar kadar sonsuz"
+    ];
+
+    const reasons = [
+      "Gözlerinin içi gülüyor, ben de yanında gülüyorum",
+      "Seninle konuşmak, dünyadaki en güzel şey",
+      "Kendimi senin yanında güvende hissediyorum",
+      "Birlikteyken zaman sanki daha yavaş akıyor",
+      "Sesin bile içimi huzurla dolduruyor",
+      "Sen benim en büyük şansım",
+      "Sana baktıkça iyi ki diyorum"
+    ];
+
+    const startBtn = document.getElementById("startBtn");
+    const choiceArea = document.getElementById("choice-area");
+    const choiceButtons = document.getElementById("choice-buttons");
+    const messageP = document.getElementById("message");
+    const audio = document.getElementById("audio");
+    const muteBtn = document.getElementById("muteBtn");
+
+    startBtn.addEventListener("click", () => {
+      startBtn.classList.add("hidden");
+      choiceArea.classList.remove("hidden");
+      createButtons();
+      createHearts();
+
+      // Müzik başlatma denemesi
+      audio.play().catch(e => {
+        console.log("Müzik çalma engellendi:", e);
+      });
+    });
+
+    function createButtons() {
+      messages.forEach((msg, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = `Buton ${index + 1}`;
+        btn.addEventListener("click", () => handleClick(msg));
+        choiceButtons.appendChild(btn);
+      });
+    }
+
+    function handleClick(message) {
+      messageP.textContent = message;
+      const allButtons = choiceButtons.querySelectorAll("button");
+      allButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = 0.6;
+        btn.style.cursor = "not-allowed";
+      });
+    }
+
+    function createHearts() {
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = "-20px";
+        document.body.appendChild(heart);
+        setTimeout(() => { heart.remove(); }, 3000);
+      }
+    }
+
+    // ❤️ Aşk Nedenleri Buton
+    const loveBtn = document.getElementById("loveBtn");
+    const reasonList = document.getElementById("reasonList");
+
+    loveBtn.addEventListener("click", () => {
+      reasonList.innerHTML = "";
+      reasons.forEach((reason, index) => {
+        const p = document.createElement("div");
+        p.classList.add("reason-line");
+        p.textContent = `• ${reason}`;
+        reasonList.appendChild(p);
+        setTimeout(() => {
+          p.classList.add("show");
+        }, 500 * index);
+      });
+      loveBtn.disabled = true;
+      loveBtn.style.opacity = 0.7;
+      loveBtn.style.cursor = "not-allowed";
+    });
+
+    // 🎵 Müzik kontrolü (gizli player olduğu için gerek yok ama hazır)
+    muteBtn.addEventListener("click", () => {
+      if(audio.muted) {
+        audio.muted = false;
+        muteBtn.textContent = "🔊";
+        muteBtn.title = "Sesi Kapat";
+      } else {
+        audio.muted = true;
+        muteBtn.textContent = "🔇";
+        muteBtn.title = "Sesi Aç";
+      }
+    });
+  </script>
+
+</body>
+</html>
